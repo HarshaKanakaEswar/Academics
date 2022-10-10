@@ -1,0 +1,747 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+The Laplace Transform
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.HARSHA KANAKA ESWAR
+\end_layout
+
+\begin_layout Date
+April 07,2018
+\end_layout
+
+\begin_layout Abstract
+In this report we are going to discuss about how to use scipy.signal for
+ solving 'Linear' time Invariant system's and see how to get the output
+ if we know both input function and frequency response of the system.
+\end_layout
+
+\begin_layout Section*
+1 Time Response from the Laplace transform:
+\end_layout
+
+\begin_layout Standard
+
+\size large
+\color blue
+Question1:
+\size default
+\color inherit
+
+\begin_inset Newline newline
+\end_inset
+
+Lets take the function :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(t)=cos(1.5t)e^{-0.5t}u_{0}(t)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Which has Laplace transform:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+F(s)=\frac{s+0.5}{(s+0.5)^{2}+2.25}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Lets solve the equation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\ddot{x}+2.25x=f(t)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So we can write 
+\begin_inset Formula $X(s)$
+\end_inset
+
+ as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(s)=\frac{s+0.5}{((s+0.5)^{2}+2.25)\mbox{\times}(s^{2}+2.25)}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So we have 
+\begin_inset Formula $X(s)$
+\end_inset
+
+ lets get its time response using sp.impulse:
+\end_layout
+
+\begin_layout LyX-Code
+import scipy.signal as sp
+\end_layout
+
+\begin_layout LyX-Code
+t=linspace(0,50,1000)
+\end_layout
+
+\begin_layout LyX-Code
+X=sp.lti([1,0.5],polymul([1,1,2.5],[1,0,2.25]))
+\end_layout
+
+\begin_layout LyX-Code
+t1,x1=sp.impulse(X,None,t)
+\end_layout
+
+\begin_layout Standard
+
+\size large
+\color blue
+Question2:
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+\color inherit
+Similar to the early case we have slight change in 
+\begin_inset Formula $f(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(t)=cos(1.5t)e^{-0.05t}u_{0}(t)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here there is only small change in 
+\begin_inset Formula $X(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+X=sp.lti([1,0.05],polymul([1,0.1,2.2525],[1,0,2.25]))
+\end_layout
+
+\begin_layout Standard
+
+\size large
+\color blue
+Question3:
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+\color inherit
+Here we have transfer function 
+\begin_inset Formula $\frac{X(s)}{F(s)}=H(s)$
+\end_inset
+
+,where 
+\begin_inset Formula $H(s)$
+\end_inset
+
+ is given as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H(s)=\frac{1}{(s^{2}+2.25)}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now will use a for loop and send the 
+\begin_inset Formula $f(t)$
+\end_inset
+
+'s at variable frequencies and see the behavior of the output:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+H=sp.lti([1],[1,0,2.25])
+\end_layout
+
+\begin_layout LyX-Code
+
+w=arange(1.4,1.6,0.05)
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(0,50,1000)
+\end_layout
+
+\begin_layout LyX-Code
+
+for k in w:
+\end_layout
+
+\begin_layout LyX-Code
+
+	f=cos(k*t)*exp(-0.05*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+	t1,y,svec=sp.lsim(H,f,t)
+\end_layout
+
+\begin_layout LyX-Code
+
+	plot(t1,y,label=k)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here is the output:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename variable_omega.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The maximum value of peak is occurring at frequency=1.5 which is the resonant
+ frequency of the system.
+\begin_inset Newline newline
+\end_inset
+
+
+\size large
+\color blue
+Question3:
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+\color inherit
+Now lets solve a coupled spring problem whose equations are given by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\ddot{x}+(x-y) & =0\\
+\ddot{y}+2(y-x) & =0
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+With initial conditions given as 
+\begin_inset Formula $x(0)=1,\dot{x}=y(0)=\dot{y}(0)=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+H=sp.lti([1,0,2,0],[1,0,3,0,0])
+\end_layout
+
+\begin_layout LyX-Code
+t=linspace(0,20,1000)
+\end_layout
+
+\begin_layout LyX-Code
+t1,x=sp.impulse(H,None,t)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+H1=sp.lti([2],[1,0,3,0])
+\end_layout
+
+\begin_layout LyX-Code
+t2,y=sp.impulse(H1,None,t)
+\end_layout
+
+\begin_layout Standard
+We have solved 
+\begin_inset Formula $X(s),Y(s)$
+\end_inset
+
+ manually and got the 
+\begin_inset Formula $x(t)$
+\end_inset
+
+ and 
+\begin_inset Formula $y(t)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename x.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename y.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename x,y.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The graph of 
+\begin_inset Formula $x(t),y(t)$
+\end_inset
+
+ has a phase shift of 
+\begin_inset Formula $\frac{\pi}{2}$
+\end_inset
+
+because 
+\begin_inset Formula $X(s),Y(s)$
+\end_inset
+
+ are related by factor of 
+\begin_inset Formula $\frac{1}{s}$
+\end_inset
+
+ which gives a phase shift of 
+\begin_inset Formula $\frac{\pi}{2}$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\size large
+\color blue
+Question4:
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+\color inherit
+Here we Have a general R,L,C circuit whose transfer function is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H(s)=\frac{1}{LCs^{2}+RCs+1}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where the Values of R,L,C are given as 
+\begin_inset Formula $100$
+\end_inset
+
+
+\begin_inset Formula $\Omega$
+\end_inset
+
+
+\begin_inset Formula $,1\mu$
+\end_inset
+
+
+\begin_inset Formula $H,1.0$
+\end_inset
+
+
+\begin_inset Formula $\mu F$
+\end_inset
+
+ ,So the equation is like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H(s)=\frac{1}{10^{-12}s^{2}+10^{-4}s+1}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So now lets get the Bode plot of the 
+\begin_inset Formula $H(s)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+H=sp.lti([1e12],[1,100e6,1e12])
+\end_layout
+
+\begin_layout LyX-Code
+
+w,S,phi=H.bode()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogx(w,S)
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('|H|')
+\end_layout
+
+\begin_layout LyX-Code
+
+title('Bode plot of H(s)')
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('$
+\backslash
+sphericalangle$H')
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('logw')
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogx(w,phi)
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bode PLOT:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename Bode.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Its nothing but a lowpass filter which can be interpreted through equation
+ or from the plot.
+\begin_inset Newline newline
+\end_inset
+
+
+\size large
+\color blue
+Question5:
+\size default
+\color inherit
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets pass the below signal to the above lowpass fiter and see the output;
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+v_{i}(t)=cos(10^{3}t)u(t)-cos(10^{6}t)u(t)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We will use sp.lsim and send the signal as the input for the above filter:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+def v(t):
+\end_layout
+
+\begin_layout LyX-Code
+
+	return cos(1000*t)-cos((10**6)*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+f1,y1,svec=sp.lsim(H,v(t1),t1)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We will plot the graph for two time intervals:
+\end_layout
+
+\begin_layout LyX-Code
+t2=linspace(0,1e-2,10000)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ms.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+t1=linspace(0,30e-6,1000)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename us.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We see a nice sinusoidal wave in the plot one with amplitude one,whereas
+ the second one is saying that it has some ripples in it,The reason is that
+ the input is a combination of two sinusoids of amplitude, where the maximum
+ value of input would be 
+\begin_inset Formula $2$
+\end_inset
+
+, But output has maximum amplitude one,i.e input has sinusoids of low,high
+ frequency ,so the sinusoid with low frequency passed as it is with no change
+ where as the second one is not passed by the low pass filter(where filter
+ passed it with very low amplitude making it look like ripple on the first
+ one).
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_body
+\end_document

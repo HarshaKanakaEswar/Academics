@@ -1,0 +1,967 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Current flow ,Heat generation in a Resistor
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.HARSHA KANAKA ESWAR
+\end_layout
+
+\begin_layout Date
+April 07,2018
+\end_layout
+
+\begin_layout Abstract
+In this Report we are going to discuss the current flow in resistor and
+ the heat generated at various parts of the resistor surface.we will take
+ an example model,and see the plots of current magnitude and direction using
+ quiver,along with that we will also see the surface 3d-plot for voltage.
+\end_layout
+
+\begin_layout Section
+Resistor Model:
+\end_layout
+
+\begin_layout Standard
+We are going to take a 1cm by 1cm copper plate where there a circular region
+ of plate of radius 0.35 is held at a constant one volt and an end of the
+ plate is grounded.Since current is directly proportional to current density
+ we are going to consider current density for our calculations.
+\begin_inset Newline newline
+\end_inset
+
+We will define the copper plate voltage(
+\begin_inset Formula $\phi$
+\end_inset
+
+) with 
+\shape italic
+phi
+\shape default
+ as a zeros matrix of size Nx
+\begin_inset Formula $\mbox{\times}$
+\end_inset
+
+Ny where value of 
+\shape italic
+phi
+\shape default
+ is one's in the center of copper plate so we find the points within the
+ circular region of radius 0.35 from the center and make it one's as shown
+ below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from numpy import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from pylab import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from matplotlib.pyplot import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from scipy import *
+\end_layout
+
+\begin_layout LyX-Code
+
+import mpl_toolkits.mplot3d.axes3d as p3
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y=linspace(0.5,-0.5,25)
+\end_layout
+
+\begin_layout LyX-Code
+
+x=linspace(-0.5,0.5,25)
+\end_layout
+
+\begin_layout LyX-Code
+
+i=arange(0,25,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+Nx=int(sys.argv[1]) 
+\end_layout
+
+\begin_layout LyX-Code
+
+Ny=int(sys.argv[2])
+\end_layout
+
+\begin_layout LyX-Code
+
+phi=zeros((Nx,Ny))
+\end_layout
+
+\begin_layout LyX-Code
+
+Niter=1500            
+\end_layout
+
+\begin_layout LyX-Code
+
+k1=arange(0,1500,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+k2=arange(500,1500,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y,X=meshgrid(y,x)
+\end_layout
+
+\begin_layout LyX-Code
+
+ii=where(Y*Y+X*X<=0.35*0.35)
+\end_layout
+
+\begin_layout LyX-Code
+
+phi[ii]=1.0
+\end_layout
+
+\begin_layout LyX-Code
+
+print( phi)
+\end_layout
+
+\begin_layout LyX-Code
+
+scatter(x[ii[0]],y[ii[1]],color='r',label="red dots are 1v")
+\end_layout
+
+\begin_layout LyX-Code
+
+contour(x,y,phi)
+\end_layout
+
+\begin_layout LyX-Code
+
+title("initial contour plot of voltage ")
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('y')
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We will first take a look at the voltage contour plot of the plate:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename contour1.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As we can see we made the circular region as one volt and the remaining
+ others as zero.
+\end_layout
+
+\begin_layout Section
+Solving the phi from Laplace's equation:
+\end_layout
+
+\begin_layout Standard
+We have the Laplace's equation of given as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla^{2}\phi=0
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We can convert the above equation into Cartesian coordinates as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial^{2}\phi}{\partial x^{2}}+\frac{\partial^{2}\phi}{\partial y^{2}}=0
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If we have the values of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ clearly we can write:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left.\frac{\partial\phi}{\partial x}\right|_{(x_{i},y_{i})}=\frac{\phi(x_{i+\frac{1}{2}},y_{j})-\phi(x_{i-\frac{1}{2}},y_{j})}{\Delta x}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left.\frac{\partial^{2}\phi}{\partial x^{2}}\right|_{(x_{i},y_{i})}=\frac{\phi(x_{i+1},y_{j})-2\phi(x_{i},y_{j})+\phi(x_{i-1},y_{j})}{\left(\Delta x\right)^{2}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So From the above equations we can derive the value of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ at a corresponding point from its neighboring points like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{i,j}=\frac{\phi_{i+1,,j}+\phi_{i-1,,j}+\phi_{i,,j+1}+\phi_{i,,j-1}}{4}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So at every point we just have to update the value of 
+\shape italic
+phi 
+\shape default
+from the value of its neighboring points and lets keep updating the 
+\shape italic
+
+\begin_inset Formula $\phi$
+\end_inset
+
+ 
+\shape default
+for 1500 no of iterations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+for k in arange(1,1501,1):
+\end_layout
+
+\begin_layout LyX-Code
+
+	oldphi=phi.copy()
+\end_layout
+
+\begin_layout LyX-Code
+
+	phi[1:Nx-1,1:Ny-1]=0.25*(phi[1:Nx-1,0:Ny-2]+phi[1:Nx-1,2:Ny]+ 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+
+             phi[0:Nx-2,1:Ny-1]+phi[2:Nx,1:Ny-1])
+\end_layout
+
+\begin_layout LyX-Code
+
+	phi[ii]=1.0
+\end_layout
+
+\begin_layout LyX-Code
+
+	phi[0:-1,0]=phi[0:-1,1]
+\end_layout
+
+\begin_layout LyX-Code
+
+	phi[0:-1,-1]=phi[0:-1,-2]
+\end_layout
+
+\begin_layout LyX-Code
+
+	phi[0,0:-1]=phi[1,0:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+	errors[k-1]=(abs(phi-oldphi)).max()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we have small exception about boundary conditions that where the electrode
+ is present we give the same value of the electrode potential.At the other
+ boundaries the current is tangential by the condition charge can't leap
+ out of the plate so ,it means the Field is tangential,i.e Gradient of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ in normal direction should be zero(because of no field in that direction
+ which means the value of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ should remain the same in normal direction.
+\end_layout
+
+\begin_layout Standard
+So at the boundary points we just updated the side by values of them,which
+ were updated and at electrode we kept constant zero potential.
+\begin_inset Newline newline
+\end_inset
+
+Now lets plot the contour of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ once again:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+scatter(x[ii[0]],y[ii[1]],color='r')
+\end_layout
+
+\begin_layout LyX-Code
+
+contour(x,y,phi)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('y')
+\end_layout
+
+\begin_layout LyX-Code
+
+title("contour plot of $
+\backslash
+phi$ after iterations")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here is the plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename contour2.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Along with the update of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ we have also calculated the error in 
+\begin_inset Formula $\phi$
+\end_inset
+
+ which is defined as the maximum difference between elements in old and
+ updated 
+\begin_inset Formula $\phi$
+\end_inset
+
+ ,and at every iteration the value is stored in an array.
+\end_layout
+
+\begin_layout LyX-Code
+errors[k-1]=(abs(phi-oldphi)).max()
+\end_layout
+
+\begin_layout Standard
+Here the errors are actually varying exponential wit no of iterations in
+ the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=Ae^{Bx}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Take logarithm on both sides to get a linear variance of 
+\begin_inset Formula $logy$
+\end_inset
+
+ and 
+\begin_inset Formula $x$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+logy=logA+Bx
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now we shall use least square approach for solving 
+\begin_inset Formula $logA,B$
+\end_inset
+
+ starting from first iteration as one fit and starting from 
+\begin_inset Formula $500^{th}$
+\end_inset
+
+as the other fit and lets see the best fit among them:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+y1=log(errors)
+\end_layout
+
+\begin_layout LyX-Code
+
+A=zeros((Niter,2))
+\end_layout
+
+\begin_layout LyX-Code
+
+A[:,0]=1
+\end_layout
+
+\begin_layout LyX-Code
+
+A[:,1]=k1
+\end_layout
+
+\begin_layout LyX-Code
+
+cl=lstsq(A,y1)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+a=exp(cl[0])
+\end_layout
+
+\begin_layout LyX-Code
+
+b=cl[1]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y2=log(errors[500:1500])
+\end_layout
+
+\begin_layout LyX-Code
+
+B=zeros((1000,2))
+\end_layout
+
+\begin_layout LyX-Code
+
+B[:,0]=1
+\end_layout
+
+\begin_layout LyX-Code
+
+B[:,1]=range(500,1500)
+\end_layout
+
+\begin_layout LyX-Code
+
+cl1=lstsq(B,y2)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+c1=a*e**(k1[1:]*b)
+\end_layout
+
+\begin_layout LyX-Code
+
+c2=e**(cl1[0])*e**(cl1[1]*k2)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we got fit values in c1,c2 lets plot them:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+ylabel('Errors')
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('no of iterations')
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(range(1,1500),c1,'y',label="f1")
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(k1,errors,label="errors")
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(k2,c2,'r',label="f2")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+title('semilogy plot of errors and its fit values')
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Plot of errors and its fits in semilogy scale:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename fit.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Among these fit2 seems to be more accurate because the errors are not exactly
+ exponentially varying for the less no of iterations so the fit1 is slightly
+ away from the errors where as the fit2 is exactly coinciding with the errors.Thu
+s fit2 is better approximation .
+\end_layout
+
+\begin_layout Subsection*
+Current and surface plot of potential
+\end_layout
+
+\begin_layout Standard
+Since we already got the potential lets just go ahead and plot the surface
+ plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename Surface.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We can see clearly some circle having constant 1v potential, which is nothing
+ but what we have done during the iterations making the center circular
+ region of plate with radius 0.35 as 1v.We can also see that the values after
+ the circle are almost same and near to one.
+\begin_inset Newline newline
+\end_inset
+
+Okay Now lets derive 
+\begin_inset Formula $j_{x}$
+\end_inset
+
+ from the following equations:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+j_{x}\; & =\;-\frac{\partial\phi}{\partial x}\\
+j_{y\;} & =\;-\frac{\partial\phi}{\partial y}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Which can be written as :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+J_{x,ij}\; & =\;\frac{1}{2}\left(\phi_{i,,j-1}-\phi_{i,,j+1}\right)\\
+J_{x,ij}\; & =\;\frac{1}{2}\left(\phi_{i,,j-1}-\phi_{i,,j+1}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now we can get 
+\begin_inset Formula $J_{x},,J_{y}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+jx=zeros((Nx,Ny))
+\end_layout
+
+\begin_layout LyX-Code
+
+jy=zeros((Nx,Ny))
+\end_layout
+
+\begin_layout LyX-Code
+
+jx[0:Nx,1:Ny-1]=0.5*-(phi[0:Nx,0:Ny-2]-phi[0:Nx,2:Ny])
+\end_layout
+
+\begin_layout LyX-Code
+
+jy[1:Nx-1,0:Ny]=0.5*-(phi[0:Nx-2,0:Ny]-phi[2:Nx,0:Ny])
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lets plot J using 
+\shape italic
+quiver
+\shape default
+ plot as follows:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+scatter(x[ii[0]],y[ii[1]],color='r')
+\end_layout
+
+\begin_layout LyX-Code
+
+quiver(y,x,jx[::-1,:],jy[::-1,:],scale=8)
+\end_layout
+
+\begin_layout LyX-Code
+
+title("current density")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here is the quiver plot of current density:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename quiver.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here we can see the current is almost zero at the upper points that is because
+ the potential difference is not very large which can be seen in the 3d
+ surface potential plot.
+\begin_inset Newline newline
+\end_inset
+
+And the current magnitude is increasing as we come down along the y axis
+ its because the currents are summing up,as they can't escape outside there
+ are all adding up and approaching the ground electrode.Direction is just
+ seen as from high to low potential.
+\end_layout
+
+\end_body
+\end_document

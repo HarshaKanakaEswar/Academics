@@ -1,0 +1,829 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Vectors and Functions
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.Harsha Kanaka Eswar
+\end_layout
+
+\begin_layout Date
+6th April,2018
+\end_layout
+
+\begin_layout Abstract
+In this Report we are going to see how to define a function,and vectors.We
+ define functions in such a way that it takes a vector arguments.
+ We will also discuss use of functions and the integration operation using
+ quad from scipy.Then we will take a look at trapezoidal rule of computation
+ of integration by using cumsum.
+\end_layout
+
+\begin_layout Section*
+1 Functions:
+\end_layout
+
+\begin_layout Standard
+In python Function generally takes the inputs as its arguments,and does
+ the desired mathematical operations on them and gives the output.Its is
+ most helpful because for performing the same operation we need not write
+ the same code again and again thus reducing the length of the code.
+\begin_inset Newline newline
+\end_inset
+
+Now lets define a function 
+\begin_inset Formula $f(t)=\frac{1}{1+t^{2}}$
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout LyX-Code
+def f(t):
+\end_layout
+
+\begin_layout LyX-Code
+     a=1/(1+(t)**2)
+\end_layout
+
+\begin_layout LyX-Code
+     return a
+\end_layout
+
+\begin_layout Standard
+What the above function does is it takes values of 't' as input and performs
+ the assigned operation and stores the value, and 'return' is used to get
+ the output from function for further use of computed value in the code.
+\begin_inset Newline newline
+\end_inset
+
+Now lets define a vector 'x' (we have to import 
+\shape italic
+numpy
+\shape default
+ for using linspace) and give it as an input to the above function and get
+ the output:
+\end_layout
+
+\begin_layout LyX-Code
+from pylab import *
+\end_layout
+
+\begin_layout LyX-Code
+import numpy
+\end_layout
+
+\begin_layout LyX-Code
+x=arange(0,5,0.1)#Define a Vector
+\end_layout
+
+\begin_layout Standard
+Lets call the function 'f(t)' giving above vector 'x' s the input and store
+ the output in y And plot it.
+\end_layout
+
+\begin_layout LyX-Code
+y=f(x)
+\end_layout
+
+\begin_layout LyX-Code
+plot(x,y)
+\end_layout
+
+\begin_layout LyX-Code
+xlabel('t')
+\end_layout
+
+\begin_layout LyX-Code
+ylabel('f(t)')
+\end_layout
+
+\begin_layout LyX-Code
+plt.title(r'plot of $
+\backslash
+frac{1}{(1+t^2)}$')
+\end_layout
+
+\begin_layout LyX-Code
+show()
+\end_layout
+
+\begin_layout Standard
+Lets take a look at the graph:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename function1.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+2 Quad Usage:
+\end_layout
+
+\begin_layout Standard
+Okay we got the function 
+\begin_inset Formula $f(t)=\frac{1}{1+t^{2}}$
+\end_inset
+
+ now lets integrate this function,Which should give the output as 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$
+\backslash
+int_{0}^{x}
+\backslash
+frac{1}{1+t^2}$dt
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+=$tan^{-1}$x
+\end_layout
+
+\end_inset
+
+,By using '
+\shape italic
+quad
+\shape default
+' we get two values as output one is integrated value and other gives an
+ estimated error in the computation.
+\begin_inset Newline newline
+\end_inset
+
+Lets see the code:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+d=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+e=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+for i in x:
+\end_layout
+
+\begin_layout LyX-Code
+
+    a,b=quad(f,0,i)
+\end_layout
+
+\begin_layout LyX-Code
+\noindent
+
+    b=abs(arctan(i)-a)
+\end_layout
+
+\begin_layout LyX-Code
+
+    e.append(b)
+\end_layout
+
+\begin_layout LyX-Code
+
+    d.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+z=arctan(x)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+f1=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(x,z,'k',label="$tan^{-1}$(x)")
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(x,d,'ro',label="quad fn")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r'Comparision of -integral of $
+\backslash
+frac{1}{(1+t^2)}$,$tan^{-1}$(x)')
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel(r"$
+\backslash
+int_0^x 
+\backslash
+frac{dt}{(1+t^2)}$",fontsize=20)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+f2=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(x,e,'r.')
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel('Error')
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.title(r"Error in $
+\backslash
+int_0^x 
+\backslash
+frac{dt}{(1+t^2)}$")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Okay then lets plot the integral output along with 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$tan^{-1}$x
+\end_layout
+
+\end_inset
+
+ and see how good is the integration:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename quad_function.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As we can see the quad function is almost accurately matching with function,but
+ let us see the error in a semilogy axis that how much the quad function
+ deviates from original output:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename quad_error.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So the error is very minimum which is in order of 
+\begin_inset Formula $10^{-15}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+3 Trapezoidal Rule:
+\end_layout
+
+\begin_layout Standard
+If a function is known at different points between points 'a,b' at an interval
+ 'h' ,i.e 
+\begin_inset Formula $a,a+h,a+2h,.....,b$
+\end_inset
+
+.Then we can compute the integral of function with limits a,b.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I=\begin{cases}
+0 & x=a\\
+0.5(f(a)+f(x_{i}))+\sum_{j=2}^{i-1}f(x_{j}) & x=a+h
+\end{cases}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where I is the integral we can also write it as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I_{i}=h\left(\sum_{j=1}^{i}f(x_{j})-\frac{1}{2}(f(x_{1})+f(x_{i}))\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets compute the above equation for 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$tan^{-1}$x
+\end_layout
+
+\end_inset
+
+ using code:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+def f(t):
+\end_layout
+
+\begin_layout LyX-Code
+
+    a=1/(1+(t)**2)
+\end_layout
+
+\begin_layout LyX-Code
+
+    return a
+\end_layout
+
+\begin_layout LyX-Code
+
+c=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+for x in l
+\end_layout
+
+\begin_layout LyX-Code
+
+    a=h*(f(x))+a
+\end_layout
+
+\begin_layout LyX-Code
+
+    b=a-0.5*h*(f(0)+f(x))
+\end_layout
+
+\begin_layout LyX-Code
+
+c.append(b)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In The above code we are using 
+\shape italic
+'for' loop
+\shape default
+ for computation and we have used lists to append the values obtained now
+ lets see a more optimized one using vectors and 
+\series bold
+Cumsum
+\series default
+:
+\end_layout
+
+\begin_layout LyX-Code
+l=arange(0,5,0.1)
+\end_layout
+
+\begin_layout LyX-Code
+h=0.1
+\end_layout
+
+\begin_layout LyX-Code
+k=arange(0,len(l),1)
+\end_layout
+
+\begin_layout LyX-Code
+print(k)
+\end_layout
+
+\begin_layout LyX-Code
+def f(t):
+\end_layout
+
+\begin_layout LyX-Code
+    a=1/(1+(t)**2)
+\end_layout
+
+\begin_layout LyX-Code
+    return a
+\end_layout
+
+\begin_layout LyX-Code
+c=f(l)
+\end_layout
+
+\begin_layout LyX-Code
+b=cumsum(c)
+\end_layout
+
+\begin_layout LyX-Code
+e=h*(b[k]-0.5*(f(0)+f(l)))
+\end_layout
+
+\begin_layout Standard
+Now we can see the for loop is avoided and this is much faster because of
+ usage of vectors.
+\end_layout
+
+\begin_layout Section*
+3 Tolerance in Error:
+\end_layout
+
+\begin_layout Standard
+We computed the values of function using Trapezoidal rule but there will
+ be definitely some error in the values when compared to exact integration,And
+ it is mainly depends on 'h' Value,The more smaller 'h' value we take the
+ smaller the error is.
+\begin_inset Newline newline
+\end_inset
+
+But we can't just give a random small 'h' value which may take a lot of
+ computational time so what we will do is we will get the 
+\shape italic
+estimated error 
+\shape default
+for different values of 'h' and gradually reducing 'h' to half until we
+ get the error under the tolerance level.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+def integral(h=0):
+\end_layout
+
+\begin_layout LyX-Code
+
+    l=arange(0,1,h)
+\end_layout
+
+\begin_layout LyX-Code
+
+    k=arange(0,len(l),1)
+\end_layout
+
+\begin_layout LyX-Code
+
+    c=f(l)
+\end_layout
+
+\begin_layout LyX-Code
+
+    b=cumsum(c)
+\end_layout
+
+\begin_layout LyX-Code
+
+    e=h*(b[k]-0.5*(f(0)+f(l)))
+\end_layout
+
+\begin_layout LyX-Code
+
+    return e
+\end_layout
+
+\begin_layout LyX-Code
+
+h=0.5
+\end_layout
+
+\begin_layout LyX-Code
+
+e=1
+\end_layout
+
+\begin_layout LyX-Code
+
+e1=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+h1=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+e2=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+while (e>10**(-8)):
+\end_layout
+
+\begin_layout LyX-Code
+
+    d1=integral(h)
+\end_layout
+
+\begin_layout LyX-Code
+
+    d2=integral(h/2)
+\end_layout
+
+\begin_layout LyX-Code
+
+    err=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+    l=arange(0,1,h)
+\end_layout
+
+\begin_layout LyX-Code
+
+    y=arange(0,len(l),1)
+\end_layout
+
+\begin_layout LyX-Code
+
+    err=abs(d2[2*y]-d1[y])
+\end_layout
+
+\begin_layout LyX-Code
+
+    e=max(err)
+\end_layout
+
+\begin_layout LyX-Code
+
+    b=where(err==e)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+    m=arctan(b*h)-d1[b]
+\end_layout
+
+\begin_layout LyX-Code
+
+    h1.append(h)
+\end_layout
+
+\begin_layout LyX-Code
+
+    e2.append(m)
+\end_layout
+
+\begin_layout LyX-Code
+
+    e1.append(e)
+\end_layout
+
+\begin_layout LyX-Code
+
+    h=h/2
+\end_layout
+
+\begin_layout LyX-Code
+
+title('comparision between estimated and exact error')
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('h')
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('Error')
+\end_layout
+
+\begin_layout LyX-Code
+
+loglog(h1,e1,"+",color="green",label="Estimated error")
+\end_layout
+
+\begin_layout LyX-Code
+
+loglog(h1,e2,"ro",label="Exact error")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Here is difference between estimated and exact error plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename estimated.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here we can observe that there is no big difference between estimated and
+ exact error.
+ so when we don't know the exact integral of a function, we choose 'h' value
+ from the estimated error.
+\end_layout
+
+\end_body
+\end_document

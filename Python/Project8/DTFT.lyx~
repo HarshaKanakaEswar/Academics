@@ -1,0 +1,1909 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Python 9 assignment
+\begin_inset Newline newline
+\end_inset
+
+The Digital Fourier Transform
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.HARSHA KANAKA ESWAR
+\end_layout
+
+\begin_layout Date
+April 11, 2018
+\end_layout
+
+\begin_layout Abstract
+In this report we are going to discuss about Digital Fourier Transform of
+ periodic signals by using 'fft' command we will plot the magnitude and
+ phase spectrum and compare with the original function.We will also see how
+ the plot varies by varying the sampling period.
+\end_layout
+
+\begin_layout Section*
+1 Fourier Transform:
+\end_layout
+
+\begin_layout Standard
+We can determine function's time domain from its frequency domain and viceversa.
+\begin_inset Newline newline
+\end_inset
+
+The relation for 
+\begin_inset Formula $F(j\omega),f(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+F(j\omega) & =\int_{-\infty}^{\infty}f(t)e^{-j\omega t}dt\\
+f(t) & =\frac{1}{2\pi}\int_{-\infty}^{\infty}F(j\omega)e^{j\omega t}d\omega
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When the function is periodic the Fourier transform becomes Fourier series
+ as shown below(
+\begin_inset Formula $t_{0}$
+\end_inset
+
+can also be taken as 
+\begin_inset Formula $0$
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+f(t) & =\sum_{n=-\infty}^{\infty}c_{n}e^{jnt}\\
+c_{n} & =\frac{1}{2\pi}\int_{t_{0}}^{t_{0}+2\pi}f(t)e^{-jnt}dt
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If 
+\begin_inset Formula $f(t)$
+\end_inset
+
+ is discontinuous ,say 
+\begin_inset Formula $f[n]$
+\end_inset
+
+ then we define Z transform of function as shown below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+F(z)=\sum_{n=-\infty}^{\infty}f[n]z^{-n}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+By just replacing 
+\begin_inset Formula $z$
+\end_inset
+
+ with 
+\begin_inset Formula $e^{j\theta}$
+\end_inset
+
+we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+F(e^{j\theta})=\sum_{n=-\infty}^{\infty}f[n]e^{-jn\theta}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The 
+\begin_inset Formula $F(z)$
+\end_inset
+
+ looks like a Fourier series with coefficients as 
+\begin_inset Formula $f[n]$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $F(e^{j\theta})$
+\end_inset
+
+ is also called as Digital Spectrum of the samples 
+\begin_inset Formula $f[n]$
+\end_inset
+
+ and also called as the DTFT of f[n].
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If the 
+\begin_inset Formula $f[n]$
+\end_inset
+
+ is periodic with period 
+\begin_inset Formula $N$
+\end_inset
+
+,i.e:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f[n+N]=f[n]\forall n
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The then DTFT of 
+\begin_inset Formula $f[n]$
+\end_inset
+
+ also becomes periodic with same period 
+\begin_inset Formula $N$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+F[n] & =\sum_{n=0}^{N-1}f[n]exp\left(-2\pi\frac{nk}{N}j\right)=\sum_{n=0}^{N-1}f[n]W^{-n}\\
+f[n] & =\frac{1}{N}\sum_{k=0}^{N-1}F[k]W^{-nk}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here 
+\begin_inset Formula $W=e^{\frac{-2\pi j}{N}}$
+\end_inset
+
+ and 
+\begin_inset Formula $F[k]$
+\end_inset
+
+ is same as 
+\begin_inset Formula $F(e^{j\theta})$
+\end_inset
+
+ where 
+\begin_inset Formula $\theta=\frac{2\pi k}{N}$
+\end_inset
+
+ so we can write 
+\begin_inset Formula $F\left(e^{j2\pi k/N}\right)$
+\end_inset
+
+ can be written as sum of the periodic repetitions:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+F\left(e^{j2\pi k/N}\right)=\sum_{n=0}^{N-1}f[n]exp\left(-2\pi\frac{nk}{N}j\right)+\ldots
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The repetitions are just helpful in building up the impulses,We can say
+ that DFT is a sampled version of the DTFT.
+\end_layout
+
+\begin_layout Section*
+2 Examples:
+\end_layout
+
+\begin_layout Standard
+There are actually two commands available in python for doing forward Fourier
+ transform and inverse Fourier transform as shown below:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+numpy.fft.fft()
+\end_layout
+
+\begin_layout LyX-Code
+
+numpy.fft.ifft()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now lets take an example function 
+\begin_inset Formula $y=sin(5x)$
+\end_inset
+
+ which can be written as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=sin(x)=\frac{e^{j5x}-e^{-j5x}}{2j}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So the Fourier transform spectrum would look like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y(j\omega)=\frac{1}{2j}\left[\delta(\omega-5)-\delta(\omega+5)\right]
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now we get the spectrum of 
+\begin_inset Formula $sin(5x)$
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+x=linspace(0,2*pi,128)
+\end_layout
+
+\begin_layout LyX-Code
+
+y=sin(5*x)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fft(y)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we will plot the spectrum stored in 
+\begin_inset Formula $Y$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(unwrap(angle(Y)),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here is the plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t1.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Its not exactly the plot we are expecting to get, we will do small changes
+ in the code as shown below:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+y=sin(5*x)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/128.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-64,63,128)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the code for plotting the graph is:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+sin(5t)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+ii=where(abs(Y)>1e-3)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w[ii],angle(Y[ii]),'go',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$k$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig9-2.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we are plotting the graph of phases for magnitude greater than
+\begin_inset Formula $10^{-3}$
+\end_inset
+
+ with separate colour:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t2.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So we got peaks at 
+\begin_inset Formula $-5,5$
+\end_inset
+
+ as derived from the equations and phase as 
+\begin_inset Formula $\frac{\pi}{2},\frac{-\pi}{2}$
+\end_inset
+
+ respectively.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets take another example 
+\begin_inset Formula $f(t)=(1+0.1cost)cos10t$
+\end_inset
+
+, In this we stretch the spectrum by keeping sampling time constant.
+\begin_inset Newline newline
+\end_inset
+
+Solving the Fourier spectrum of given 
+\begin_inset Formula $f(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+f(t) & =\left(1+0.1\left(\frac{e^{0.1tj}+e^{-0.1tj}}{2}\right)\right)\left(\frac{e^{10tj}+e^{-10tj}}{2}\right)\\
+f(t) & =0.5\left(e^{10tj}+e^{-10tj}\right)+0.025\left(e^{11tj}+e^{-11tj}+e^{9tj}+e^{-9tj}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So we should get 
+\begin_inset Formula $6$
+\end_inset
+
+ peaks at:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega=10,-10$
+\end_inset
+
+ with amplitude 
+\begin_inset Formula $0.5$
+\end_inset
+
+ with phase=
+\begin_inset Formula $0$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega=11,-11,9,-9$
+\end_inset
+
+ with amplitude 
+\begin_inset Formula $0.025$
+\end_inset
+
+ with phase=
+\begin_inset Formula $0$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Standard
+, now lets take sampling period as 
+\begin_inset Formula $128$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+t=linspace(0,2*pi,129);
+\end_layout
+
+\begin_layout LyX-Code
+
+t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+y=(1+0.1*cos(t))*cos(10*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/128.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-64,63,128)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lets plot the graph for this :
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-15,15])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+left(1+0.1
+\backslash
+cos
+\backslash
+left(t
+\backslash
+right)
+\backslash
+right)
+\backslash
+cos
+\backslash
+left(10t
+\backslash
+right)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-15,15])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig9-4.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The graph:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename d.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In the above graph we can't see the six peaks, only two are clearly visible,So
+ Now lets make a small change in no of points taken,by increasing the interval
+ of sampling by keeping sampling time fixed:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+t=linspace(-4*pi,4*pi,513);
+\end_layout
+
+\begin_layout LyX-Code
+
+t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+y=(1+0.1*cos(t))*cos(10*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/512.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-64,64,513);
+\end_layout
+
+\begin_layout LyX-Code
+
+w=w[:-1]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see the six peaks clearly
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename nd.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here we have just increased no.of points of 
+\begin_inset Formula $\omega$
+\end_inset
+
+ to see the peaks clearly.
+\end_layout
+
+\begin_layout Section*
+3 Spectrum's of 
+\begin_inset Formula $sin^{3}(t),cos^{3}(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Now first we will discuss the spectrum of 
+\begin_inset Formula $sin^{3}(t)$
+\end_inset
+
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $sin^{3}(t)$
+\end_inset
+
+ can be written as :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=sin^{3}(t)=\left(\frac{e^{jt}-e^{-jt}}{2j}\right)^{3}=-\frac{1}{8j}\left(e^{3jt}-3e^{jt}+3e^{-jt}-e^{-3jt}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So the Fourier transform is given by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y(j\omega)=-\frac{1}{8j}\left(\left[\delta(\omega-3)-\delta(\omega+3)\right]+3\left[\delta(\omega+1)-\delta(\omega-1)\right]\right)
+\]
+
+\end_inset
+
+So there will be four peaks at:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega=3,-3$
+\end_inset
+
+ with magnitude 
+\begin_inset Formula $\frac{1}{8}$
+\end_inset
+
+ with phase 
+\begin_inset Formula $+\frac{\pi}{2},-\frac{\pi}{2}$
+\end_inset
+
+ respectively;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega=-1,1$
+\end_inset
+
+ with magnitude 
+\begin_inset Formula $\frac{3}{8}$
+\end_inset
+
+ with phase 
+\begin_inset Formula $+\frac{\pi}{2},-\frac{\pi}{2}$
+\end_inset
+
+ respectively;
+\end_layout
+
+\begin_layout Standard
+Okay now lets see the code for plotting the spectrum:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+y=sin(x)**3
+\end_layout
+
+\begin_layout Plain Layout
+
+Y=fftshift(fft(y))/512.0
+\end_layout
+
+\begin_layout Plain Layout
+
+w=linspace(-64,64,513)
+\end_layout
+
+\begin_layout Plain Layout
+
+w=w[:-1]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+figure()
+\end_layout
+
+\begin_layout Plain Layout
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout Plain Layout
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+ylim([0,0.75])
+\end_layout
+
+\begin_layout Plain Layout
+
+title(r"Spectrum of $
+\backslash
+sin^3(5t)$")
+\end_layout
+
+\begin_layout Plain Layout
+
+grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+xticks(np.arange(-10, 11, 1.0))
+\end_layout
+
+\begin_layout Plain Layout
+
+yticks(np.arange(0,0.837,0.1875))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+ii=where(abs(Y)>1e-3)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(w[ii],angle(Y[ii]),'go',lw=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout Plain Layout
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+xlabel(r"$k$",size=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+xticks(np.arange(-10, 11, 1.0))
+\end_layout
+
+\begin_layout Plain Layout
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we can see the plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename sin^3.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+There are four poles as we discussed having high magnitude at 
+\begin_inset Formula $+3,-3$
+\end_inset
+
+ and more amplitude at 
+\begin_inset Formula $+1,-1$
+\end_inset
+
+.In the plot green dots represent the phase at the points required.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets take a look at 
+\begin_inset Formula $cos^{3}(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=cos^{3}(t)=\left(\frac{e^{jt}+e^{-jt}}{2}\right)^{3}=\frac{1}{8}\left(e^{3jt}+3e^{jt}+3e^{-jt}+e^{-3jt}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The Fourier transform looks like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y(j\omega)=\frac{1}{8}\left(\left[\delta(\omega-3)+\delta(\omega+3)\right]+3\left[\delta(\omega+1)+\delta(\omega-1)\right]\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So there are four peaks at:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega=3,-3$
+\end_inset
+
+ having magnitude as 
+\begin_inset Formula $\frac{1}{8}$
+\end_inset
+
+ with phase at each peak as 
+\begin_inset Formula $0$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\omega=1,-1$
+\end_inset
+
+ having magnitude as 
+\begin_inset Formula $\frac{3}{8}$
+\end_inset
+
+ with phase at each peak as 
+\begin_inset Formula $0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+x=linspace(-4*pi,4*pi,513);
+\end_layout
+
+\begin_layout LyX-Code
+
+x=x[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y=cos(x)**3
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/512.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-64,64,513)
+\end_layout
+
+\begin_layout LyX-Code
+
+w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+cos^3(t)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+xticks(np.arange(-10, 11, 1.0))
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+ii=where(abs(Y)>1e-3)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w[ii],angle(Y[ii]),'go',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$k$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+xticks(np.arange(-10, 11, 1.0))
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now lets see the plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cos^.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The graph is showing the peaks at 
+\begin_inset Formula $-3,3,-1,1$
+\end_inset
+
+ with the expected amplitudes of 
+\begin_inset Formula $\frac{1}{8},\frac{3}{8}$
+\end_inset
+
+ and all the four has phase as 
+\begin_inset Formula $0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Spectrum of 
+\begin_inset Formula $cos(20t+5cos(t))$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Here we can't calculate the Fourier transform by hand,so we will directly
+ use the code and see what happens :
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+x=linspace(-8*pi,8*pi,1025);
+\end_layout
+
+\begin_layout LyX-Code
+
+x=x[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y=cos(20*x+5*cos(x))
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/1024.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-64,64,1025)
+\end_layout
+
+\begin_layout LyX-Code
+
+w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-30,30])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+cos(20t+5cost)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+ii=where(abs(Y)>1e-6)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w[ii],angle(Y[ii]),'go',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-30,30])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$k$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig9-2.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()  
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we will plot the phase plot of those having magnitude greater than
+ 
+\begin_inset Formula $10^{-3}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q3.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here we can clearly tell one thing that the phase is an odd function and
+ magnitude is even function.
+\end_layout
+
+\begin_layout Section*
+Spectrum of 
+\begin_inset Formula $exp(\frac{-t^{2}}{2})$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Lets calculate the Fourier transform
+\begin_inset Formula 
+\begin{align*}
+y & =e^{\frac{-t^{2}}{2}}\\
+Y(j\omega) & =\frac{1}{\sqrt{2\pi}}e^{\frac{-t^{2}}{2}}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+which means the Fourier transforms looks same as the given function with
+ a multiplication factor of 
+\begin_inset Formula $\frac{1}{\sqrt{2\pi}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+from pylab import*
+\end_layout
+
+\begin_layout Plain Layout
+
+x=linspace(-4*pi,4*pi,513);
+\end_layout
+
+\begin_layout Plain Layout
+
+x=x[:-1]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+y=e**(-x*x/2.0)
+\end_layout
+
+\begin_layout Plain Layout
+
+Y=4*fftshift(fft(fftshift(y)))/512
+\end_layout
+
+\begin_layout Plain Layout
+
+w=linspace(-64,64,513)
+\end_layout
+
+\begin_layout Plain Layout
+
+w=w[:-1]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+figure()
+\end_layout
+
+\begin_layout Plain Layout
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout Plain Layout
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+title(r"Spectrum of $e^
+\backslash
+frac{-t^2}{2}}$")
+\end_layout
+
+\begin_layout Plain Layout
+
+grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+ii=where(abs(Y)>1e-6)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(w[ii],angle(Y[ii]),'go',lw=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout Plain Layout
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+xlabel(r"$k$",size=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+savefig("fig9-2.png")
+\end_layout
+
+\begin_layout Plain Layout
+
+show()   #/sqrt(2*pi)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+I have approximated the spectrum to six digits :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q4.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here we can see the maximum amplitude is nothing but 
+\begin_inset Formula $\frac{1}{\sqrt{2\pi}}$
+\end_inset
+
+.Since the input is a 
+\shape italic
+even symmetric function
+\shape default
+ phase is zero everywhere in the spectrum.
+\end_layout
+
+\end_body
+\end_document

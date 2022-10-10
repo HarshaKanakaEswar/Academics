@@ -1,0 +1,800 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Fitting Data To models
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.HARSHA KANAKA ESWAR
+\end_layout
+
+\begin_layout Date
+April 07,2018
+\end_layout
+
+\begin_layout Abstract
+In this report we are going to discuss about fitting of data by taking example
+ of Bessel function and approximate it to two function:
+\begin_inset Formula $1)Acos(x_{i})+Bsin(x_{i})$
+\end_inset
+
+ and 
+\begin_inset Formula $2)A\frac{cos(x_{i})}{\sqrt{x_{i}}}+B\frac{sin(x_{i})}{\sqrt{x_{i}}}$
+\end_inset
+
+ which are near functions to bessesl function,and we will evaluate the thier
+ coefficients by best fitting method and we will see the effect of noise
+ in the fitting.
+\end_layout
+
+\begin_layout Section
+Bessel Function:
+\end_layout
+
+\begin_layout Standard
+Bessel function is generally the a solution to the differential equation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x^{2}\frac{d^{2}y}{dx^{2}}+x\frac{dy}{dx}+(x^{2}-\alpha^{2})y=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The function is in such away that the output is same for both 
+\begin_inset Formula $+\alpha$
+\end_inset
+
+ and 
+\begin_inset Formula $-\alpha$
+\end_inset
+
+ and its a smooth function with 
+\begin_inset Formula $\alpha$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The most important cases are when 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is an integer or half-integer.
+ Bessel functions for integer 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ are also known as cylinder functions or the cylindrical harmonics because
+ they appear in the solution to Laplace's equation in cylindrical coordinates.
+ Spherical Bessel functions with half-integer 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ are obtained when the Helmholtz equation is solved in spherical coordinates.
+\end_layout
+
+\begin_layout Standard
+Lets take 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ as 
+\begin_inset Formula $v$
+\end_inset
+
+ and procced.Now we have approximate form for the Bessel function as given
+ below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J_{v}(x)\approx\sqrt{\frac{2}{\pi x}}cos\left(x-\frac{v\pi}{2}-\frac{\pi}{4}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now we first plot the approximation of Bessel function along with the original
+ one.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from numpy import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from pylab import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from math import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from scipy import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from scipy.special import j1
+\end_layout
+
+\begin_layout LyX-Code
+
+x=linspace(0,20,41)
+\end_layout
+
+\begin_layout LyX-Code
+
+x=x[1:]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+jk=((2/pi)**(1/2))*cos(x-(3*pi/4))/(x**(1/2.0))
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(x,jk,"r",label="approximation of $j_1$(x)")
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(x,j1(x),label="orginal $j_1$(x)")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('$j_1$(x)')
+\end_layout
+
+\begin_layout LyX-Code
+
+title('The plot of $j_1$(x) from the approximation')
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename j1.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As we can see the approximation graph is slighty distorted from the original
+ one which means our approximate function is not that accurate for less
+ values of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets define a function called 
+\shape italic
+calcnu 
+\shape default
+Which can calculate the cofficients of A,B for our required functions when
+ approximated as shown below:
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset Formula 
+\begin{align*}
+Acos(x_{i})+Bsin(x_{i}) & \approx J_{1}(x_{i})\\
+A\frac{cos(x_{i})}{\sqrt{x_{i}}}+B\frac{sin(x_{i})}{\sqrt{x_{i}}} & \approx J_{1}(x_{i})
+\end{align*}
+
+\end_inset
+
+Calcnu:
+\end_layout
+
+\begin_layout Standard
+Here is the function which we have defined:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+calcnu(y,xo,k,eps,model)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It takes the input arguments 
+\begin_inset Formula $y$
+\end_inset
+
+,which defines the vector range for our approximation;
+\begin_inset Formula $x_{0}$
+\end_inset
+
+defines from which point of vector 
+\begin_inset Formula $y$
+\end_inset
+
+ to begin with,
+\begin_inset Formula $k$
+\end_inset
+
+ is the bessel function 
+\begin_inset Formula $v$
+\end_inset
+
+ value,
+\begin_inset Formula $eps$
+\end_inset
+
+ is the error to be added to the function ,model defines the approximtion
+ to be considered wether to take the first or the second one.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+def calcnu(y,xo,k,eps,model):
+\end_layout
+
+\begin_layout LyX-Code
+
+	l=where(y>=xo)              
+\end_layout
+
+\begin_layout LyX-Code
+
+	y1=y[l]
+\end_layout
+
+\begin_layout LyX-Code
+
+	l1=len(y1)
+\end_layout
+
+\begin_layout LyX-Code
+
+	A=zeros((l1,2))
+\end_layout
+
+\begin_layout LyX-Code
+
+	b=j1(y1)+eps*(rand(len(y1)))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if model==0:
+\end_layout
+
+\begin_layout LyX-Code
+
+		A[:,0]=cos(y1)
+\end_layout
+
+\begin_layout LyX-Code
+
+		A[:,1]=sin(y1)
+\end_layout
+
+\begin_layout LyX-Code
+
+	if model==1:
+\end_layout
+
+\begin_layout LyX-Code
+
+		A[:,0]=cos(y1)/(y1**(0.5))
+\end_layout
+
+\begin_layout LyX-Code
+
+		A[:,1]=sin(y1)/(y1**(0.5))
+\end_layout
+
+\begin_layout LyX-Code
+
+	c=lstsq(A,b)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+	i1=arccos(c[0]/((c[0])**2+(c[1])**2)**(0.5))
+\end_layout
+
+\begin_layout LyX-Code
+
+	v1=-1*(-2*i1/pi+0.5)
+\end_layout
+
+\begin_layout LyX-Code
+
+	return v1
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It returns the value of 
+\begin_inset Formula $v$
+\end_inset
+
+ (
+\begin_inset Formula $v$
+\end_inset
+
+ is the subscript of
+\begin_inset Formula $J_{v}(x)$
+\end_inset
+
+),So that we can know that the approximation is very good if 
+\begin_inset Formula $v$
+\end_inset
+
+ value is very near to 
+\shape italic
+one.
+\shape default
+(Because we have considered the function to be 
+\begin_inset Formula $J_{1}(x)$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+The function is basically calculating coefficients then getting the angle
+ 
+\begin_inset Formula $\phi$
+\end_inset
+
+ when our function is written in the form
+\begin_inset Formula $ccos(x_{i}+\phi)$
+\end_inset
+
+ where 
+\begin_inset Formula $\phi$
+\end_inset
+
+ is nothing but 
+\begin_inset Formula $cos^{-1}\left(\frac{A}{\sqrt{A^{2}+B^{2}}}\right)$
+\end_inset
+
+ so that we can get 
+\begin_inset Formula $v$
+\end_inset
+
+ value from the approximate bessel funcion 
+\begin_inset Formula $\sqrt{\frac{2}{\pi x}}cos\left(x-\frac{v\pi}{2}-\frac{\pi}{4}\right)$
+\end_inset
+
+.By equating 
+\begin_inset Formula $\phi=\frac{v\pi}{2}+\frac{\pi}{4}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Calling the calcnu function for the 
+\begin_inset Formula $v$
+\end_inset
+
+ values and ploting:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+y=arange(0.5,20.5,0.000625)
+\end_layout
+
+\begin_layout LyX-Code
+
+for xo in y3:
+\end_layout
+
+\begin_layout LyX-Code
+
+	nu=calcnu(y,xo,0,0,0)
+\end_layout
+
+\begin_layout LyX-Code
+
+	v1.append(nu)
+\end_layout
+
+\begin_layout LyX-Code
+
+for xo in y3:
+\end_layout
+
+\begin_layout LyX-Code
+
+	nu=calcnu(y,xo,0,0,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+	v2.append(nu)
+\end_layout
+
+\begin_layout LyX-Code
+
+for xo in y3:
+\end_layout
+
+\begin_layout LyX-Code
+
+	nu=calcnu(y,xo,0,0.01,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+	v3.append(nu)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+#Plots
+\end_layout
+
+\begin_layout LyX-Code
+
+fig1=figure(2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(y3,v1,'bo',label="$
+\backslash
+epsilon$=0,model(b)")
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(y3,v2,'go',label="$
+\backslash
+epsilon$=0,model(c)")
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(y3,v3,'ro',label="$
+\backslash
+epsilon$=1.0e-2,model(c)")
+\end_layout
+
+\begin_layout LyX-Code
+
+title("Range of x in steps of 0.000625")
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel("$x_0$")
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel("$
+\backslash
+mathcal{V}$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+axes=plt.gca()
+\end_layout
+
+\begin_layout LyX-Code
+
+axes.set_ylim([0.9,1.05])
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="lower left")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+Graph of 
+\begin_inset Formula $v$
+\end_inset
+
+ values for both approximate functions :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename v2.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename v1.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Conclusions:
+\end_layout
+
+\begin_layout Itemize
+Looking at the Plots 
+\begin_inset Formula $v$
+\end_inset
+
+ vs 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ we can say that model(c) is more accurate than model(b).
+\end_layout
+
+\begin_layout Itemize
+By Varying the no of measurements by not changing the steps taken for 
+\shape italic
+range of x
+\shape default
+ change from 0.5 to 0.000625we can say that the effect of noise in the graph
+ for model(c) is considerably less.
+\end_layout
+
+\begin_layout Itemize
+Moreover quality fit of error is very poor in the end values of 
+\begin_inset Formula $x_{o}$
+\end_inset
+
+ because of only less values are given for leastsq approximation.
+\end_layout
+
+\begin_layout Itemize
+There is also a large deviation from 
+\begin_inset Quotes eld
+\end_inset
+
+v
+\begin_inset Quotes erd
+\end_inset
+
+ value 
+\begin_inset Quotes eld
+\end_inset
+
+one
+\begin_inset Quotes erd
+\end_inset
+
+ in the begining,this is because the bessel function is more near to the
+ 
+\begin_inset Formula $\sqrt{\frac{2}{\pi x}}cos\left(x-\frac{v\pi}{2}-\frac{\pi}{4}\right)$
+\end_inset
+
+ approximation from higher values of 
+\begin_inset Quotes eld
+\end_inset
+
+x
+\begin_inset Quotes erd
+\end_inset
+
+ so the approximate value is not near to one in the begining.
+\end_layout
+
+\end_body
+\end_document

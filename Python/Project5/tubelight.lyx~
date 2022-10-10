@@ -1,0 +1,891 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Analysing Tubelight using simulations
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.HARSHA KANAKA ESWAR
+\end_layout
+
+\begin_layout Date
+April 07,2018
+\end_layout
+
+\begin_layout Abstract
+In this assignment we are going see the mechanism going taking place in
+ tube where the electrons coming cathode at zero travelling until the get
+ threshold energy 
+\begin_inset Formula $E_{0}$
+\end_inset
+
+where the drive atoms to excited,where the excited atom comes down to give
+ light.So we will try make a tubelight by injecting electrons and taking
+ the energy os electron becomes zero at time of collision and some other
+ approximations,To procced and see how the tubelight intensity looks like.
+\end_layout
+
+\begin_layout Section*
+1 Tubelight:
+\end_layout
+
+\begin_layout Itemize
+The Emission of light in a tubelight is mainly because of de-excitation
+ of atoms(Which are excited by the electrons having more than threshold
+ energy) inside the tube.
+\end_layout
+
+\begin_layout Itemize
+Lets create a tubelight which is divided into 
+\begin_inset Formula $n$
+\end_inset
+
+ sections and 
+\begin_inset Formula $M$
+\end_inset
+
+ electrons were injected in at every timestep,And the electrons can't excite
+ atoms until they reach a threshold velocity of 
+\begin_inset Formula $u_{0}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+The probability of excitation be 
+\begin_inset Formula $p$
+\end_inset
+
+,where the electrons when participating in collisions thier velocity becomes
+ zero.
+\end_layout
+
+\begin_layout Itemize
+And lets make the simulation run 
+\begin_inset Formula $nk$
+\end_inset
+
+ times
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+n    = int(sys.argv[1])   #100
+\end_layout
+
+\begin_layout LyX-Code
+
+M    = int(sys.argv[2])   #10
+\end_layout
+
+\begin_layout LyX-Code
+
+nk   = int(sys.argv[3])   #500
+\end_layout
+
+\begin_layout LyX-Code
+
+u0   = int(sys.argv[4])   #7
+\end_layout
+
+\begin_layout LyX-Code
+
+p    = float(sys.argv[5]) #0.5
+\end_layout
+
+\begin_layout LyX-Code
+
+Msig = float(sys.argv[6]) #2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lets vectors of 
+\begin_inset Formula $nM$
+\end_inset
+
+ dimension for storing the information of electrons:
+\end_layout
+
+\begin_layout Enumerate
+Electron position xx
+\end_layout
+
+\begin_layout Enumerate
+Electron velocity u
+\end_layout
+
+\begin_layout Enumerate
+Displacment current turn dx
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+xx=zeros((M*n))
+\end_layout
+
+\begin_layout LyX-Code
+
+u=zeros((M*n))
+\end_layout
+
+\begin_layout LyX-Code
+
+dx=zeros(M*n)
+\end_layout
+
+\begin_layout LyX-Code
+
+I=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+X=[]
+\end_layout
+
+\begin_layout LyX-Code
+
+V=[]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here I,X,V are lists to hold for intensity,position,velocity of electrons
+ at every time step.We just keep adding the informations to the lists.
+ 
+\end_layout
+
+\begin_layout Standard
+Now we shall consider only the electrons in range 
+\begin_inset Formula $0<x<L$
+\end_inset
+
+,The entries of 
+\begin_inset Formula $x>L$
+\end_inset
+
+ are made to 
+\begin_inset Formula $x=0$
+\end_inset
+
+ so the 
+\begin_inset Formula $x>0$
+\end_inset
+
+ electrons are inside the chamber.So we use 
+\shape italic
+where 
+\shape default
+to see indices where 
+\begin_inset Formula $xx>0$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout LyX-Code
+ii=where(xx>0)
+\end_layout
+
+\begin_layout Standard
+Now lets see what happens at every iteration:
+\end_layout
+
+\begin_layout Itemize
+For all elecrons whose indices are in 
+\shape italic
+ii 
+\shape default
+are inside the tube so because of accelartion due to Field the electrons
+ displace 
+\begin_inset Formula $dx_{i}$
+\end_inset
+
+ which is given by:
+\begin_inset Formula 
+\[
+dx_{i}=u_{i}\Delta t+\frac{1}{2}a(\Delta t)^{2}=u_{i}+0.5
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Accelartion is taken as one so
+\begin_inset Formula $x_{i},u_{i}$
+\end_inset
+
+are give as:
+\begin_inset Formula 
+\begin{align*}
+x_{i} & \leftarrow x_{i}+dx_{i}\\
+u_{i} & \leftarrow u_{i}+1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Since displacment is only for electrons inside the tube:
+\end_layout
+
+\begin_layout LyX-Code
+        dx[ii]=u[ii]+0.5
+\end_layout
+
+\begin_layout LyX-Code
+        xx[ii]=xx[ii]+dx[ii]
+\end_layout
+
+\begin_layout LyX-Code
+        u[ii]=u[ii]+1.0
+\end_layout
+
+\begin_layout Itemize
+The Electrons with displacement greater than 
+\begin_inset Formula $n$
+\end_inset
+
+ -
+\begin_inset Formula $dx_{i},x_{i},u_{i}$
+\end_inset
+
+should be zero:
+\end_layout
+
+\begin_layout LyX-Code
+        nn=where(xx>=n)
+\end_layout
+
+\begin_layout LyX-Code
+        xx[nn]=0
+\end_layout
+
+\begin_layout LyX-Code
+        u[nn]=0
+\end_layout
+
+\begin_layout LyX-Code
+        dx[nn]=0
+\end_layout
+
+\begin_layout Standard
+Lets consider the electrons whose velocity is more than 
+\begin_inset Formula $u_{0}$
+\end_inset
+
+,Since the chance of electron to collide is having probability 
+\begin_inset Formula $p$
+\end_inset
+
+ lets define random vector of length as no of elctrons having more velocity
+ than threshold,and the values in rand vary from 0 to 1.So we get exactly
+ desired no of electrons to collide by using the following:
+\end_layout
+
+\begin_layout LyX-Code
+kk=where(u>=u0)[0]
+\end_layout
+
+\begin_layout LyX-Code
+ll=where(rand(len(kk))<=p)[0]
+\end_layout
+
+\begin_layout LyX-Code
+kl=kk[ll]
+\end_layout
+
+\begin_layout LyX-Code
+u[kl]=0
+\end_layout
+
+\begin_layout LyX-Code
+xx[kl]=xx[kl]-random.uniform(0,1)*dx[kl]
+\end_layout
+
+\begin_layout Standard
+The last line of the code is about position of electron after collision
+ is in between 
+\begin_inset Formula $x[kl],x[kl+1]$
+\end_inset
+
+ so we have used a rand function to get the position.
+\begin_inset Newline newline
+\end_inset
+
+Now lets store the position of collision into list 'I'(intensity).
+\end_layout
+
+\begin_layout LyX-Code
+I.extend(xx[kl].tolist())
+\end_layout
+
+\begin_layout Standard
+Now we will inject new electrons into the tube by finding the indices other
+ than 
+\begin_inset Formula $0<xx<n$
+\end_inset
+
+ (nothing but xx==0) and inject new electrons with 
+\begin_inset Formula $xx$
+\end_inset
+
+ at those indices as 1.
+\end_layout
+
+\begin_layout LyX-Code
+I.extend(xx[kl].tolist())
+\end_layout
+
+\begin_layout LyX-Code
+m=int(randn()*Msig+M)
+\end_layout
+
+\begin_layout LyX-Code
+m=abs(m)
+\end_layout
+
+\begin_layout LyX-Code
+rr=where(xx==0)[0]
+\end_layout
+
+\begin_layout LyX-Code
+k=arange(0,m,1)
+\end_layout
+
+\begin_layout LyX-Code
+xx[rr[k]]=1
+\end_layout
+
+\begin_layout Standard
+Now lets store the values of positions and velocities in X,V lists:
+\end_layout
+
+\begin_layout LyX-Code
+ii=where(xx>0)
+\end_layout
+
+\begin_layout LyX-Code
+X.extend(xx[ii].tolist())
+\end_layout
+
+\begin_layout LyX-Code
+V.extend(u[ii].tolist())
+\end_layout
+
+\begin_layout Standard
+Lets include the whole thing in a for loop:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+for k in range(nk):
+\end_layout
+
+\begin_layout LyX-Code
+
+	dx[ii]=u[ii]+0.5
+\end_layout
+
+\begin_layout LyX-Code
+
+	xx[ii]=xx[ii]+dx[ii]
+\end_layout
+
+\begin_layout LyX-Code
+
+	u[ii]=u[ii]+1.0
+\end_layout
+
+\begin_layout LyX-Code
+
+	
+\end_layout
+
+\begin_layout LyX-Code
+
+        nn=where(xx>=n)
+\end_layout
+
+\begin_layout LyX-Code
+
+	xx[nn]=0
+\end_layout
+
+\begin_layout LyX-Code
+
+	u[nn]=0
+\end_layout
+
+\begin_layout LyX-Code
+
+	dx[nn]=0
+\end_layout
+
+\begin_layout LyX-Code
+
+        
+\end_layout
+
+\begin_layout LyX-Code
+
+        kk=where(u>=u0)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+	ll=where(rand(len(kk))<=p)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+	kl=kk[ll]
+\end_layout
+
+\begin_layout LyX-Code
+
+	u[kl]=0
+\end_layout
+
+\begin_layout LyX-Code
+
+	xx[kl]=xx[kl]-random.uniform(0,1)*dx[kl]
+\end_layout
+
+\begin_layout LyX-Code
+
+	
+\end_layout
+
+\begin_layout LyX-Code
+
+        I.extend(xx[kl].tolist())
+\end_layout
+
+\begin_layout LyX-Code
+
+	m=int(randn()*Msig+M)
+\end_layout
+
+\begin_layout LyX-Code
+
+	m=abs(m)
+\end_layout
+
+\begin_layout LyX-Code
+
+	rr=where(xx==0)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+	k=arange(0,m,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+	xx[rr[k]]=1
+\end_layout
+
+\begin_layout LyX-Code
+
+	
+\end_layout
+
+\begin_layout LyX-Code
+
+	ii=where(xx>0)
+\end_layout
+
+\begin_layout LyX-Code
+
+	X.extend(xx[ii].tolist())
+\end_layout
+
+\begin_layout LyX-Code
+
+	V.extend(u[ii].tolist())
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+2 Ploting the Histograms:
+\end_layout
+
+\begin_layout Standard
+Lets see the no of electrons accumlated at position over the range of timesteps:
+\end_layout
+
+\begin_layout LyX-Code
+hist(X,arange(1,100,1),color='white',edgecolor='black')
+\end_layout
+
+\begin_layout LyX-Code
+xlabel('x-->')
+\end_layout
+
+\begin_layout LyX-Code
+ylabel('no of electrons-->')
+\end_layout
+
+\begin_layout LyX-Code
+title('density of electrons')
+\end_layout
+
+\begin_layout LyX-Code
+show()
+\end_layout
+
+\begin_layout Standard
+Electron Density:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename density.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We are able to see a high peak at the begining because every electron is
+ injected at 
+\begin_inset Formula $x=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+until 
+\begin_inset Formula $x=18$
+\end_inset
+
+ the nature of the prencense of electrons are discrete and after 
+\begin_inset Formula $18$
+\end_inset
+
+ its continuous,Thats because until 
+\begin_inset Formula $x=20$
+\end_inset
+
+ no collisions are taking place.
+\end_layout
+
+\begin_layout Itemize
+We can derive it from the formula 
+\begin_inset Formula $u_{i}=u_{i}+1$
+\end_inset
+
+ we can see it takes 
+\begin_inset Formula $7$
+\end_inset
+
+ time steps for 
+\begin_inset Formula $u_{i}$
+\end_inset
+
+ to become 
+\begin_inset Formula $7$
+\end_inset
+
+(threshold value),and 
+\begin_inset Formula $x=ut+\frac{1}{2}at^{2}$
+\end_inset
+
+ where 
+\begin_inset Formula $u=0,t=7$
+\end_inset
+
+ which implies 
+\begin_inset Formula $x=24.5$
+\end_inset
+
+.
+ But at this position collision may take place at 
+\begin_inset Formula $t=7$
+\end_inset
+
+ and the position of electron can be anywhere between this position and
+ previous position 
+\begin_inset Formula $x=18$
+\end_inset
+
+ since we have given rand function from 0 to 1.We are seeing the graph to
+ be continuous from 
+\begin_inset Formula $x=18$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lets the histogram of intensity:
+\end_layout
+
+\begin_layout LyX-Code
+data=hist(I,100,color='white',edgecolor='black')
+\end_layout
+
+\begin_layout LyX-Code
+title('intensity vs position 
+\backslash
+n non-normalized')
+\end_layout
+
+\begin_layout LyX-Code
+xlabel('x-->')
+\end_layout
+
+\begin_layout LyX-Code
+ylabel('intensity-->')
+\end_layout
+
+\begin_layout Standard
+Normalized graph of Intensity:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename intensity.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Non Normalized graph of Intensity:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename nonorm.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As described earlier since no collision are taking place until 
+\begin_inset Formula $x=18$
+\end_inset
+
+ there is no light coming out and intensity is zero.And peak at 
+\begin_inset Formula $x=18$
+\end_inset
+
+ because all incoming electrons have threshold velocity at that value so
+ no of collisions are maximum.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets see the electron velocity vs space graph:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename position.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We can see here also no elctron has zero velocity for 
+\begin_inset Formula $0<x<18$
+\end_inset
+
+ because of no collisions and al other points except this point has atleast
+ some points with velocity zero because of collisions.
+\end_layout
+
+\begin_layout Itemize
+The points which are looking like single points are the electrons,which
+ didn't have any collisions and reached the cathode.
+\end_layout
+
+\begin_layout Itemize
+We can also see the manitude of highest velocity possesed by an electron
+ at a pirticular point is increasing.
+ 
+\end_layout
+
+\begin_layout Section*
+3 Optimisation:
+\end_layout
+
+\begin_layout Standard
+Here the 'ii' is calculated twice in the for loop in order to aviod it we
+ can write the first 'ii' outside which helps when FOR loop runs for the
+ first time then onwards the second 'ii' which is calculated at the end
+ of FOR loop will be used for the next iteration.
+ Until 'nk' itterations the samething repeats, which was same as the previous
+ two 'ii' calculations.
+\end_layout
+
+\begin_layout LyX-Code
+        
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_body
+\end_document

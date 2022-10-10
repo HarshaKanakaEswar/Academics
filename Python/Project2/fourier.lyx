@@ -1,0 +1,1445 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Fourier Approximations
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.Harsha Kanaka Eswar
+\end_layout
+
+\begin_layout Date
+6th April,2018
+\end_layout
+
+\begin_layout Abstract
+In this report we are going to derive Fourier series of two functions 
+\begin_inset Formula $cos(cos(x))\mbox{,}e^{x}$
+\end_inset
+
+ in two methods one is by integration and other by least square approach,By
+ integration we can find Fourier coefficients just by the known formula,
+ We can compute the functions back by putting the coefficients in the series
+ and see the accuracy of the approximations.After computing approximation
+ through integration ,we will compute coefficients using Least square approximat
+ion and again see the accuracy of approximation.Thus we can know that some
+ functions can't be approximated using Fourier coefficients.
+\end_layout
+
+\begin_layout Section*
+1 Fourier series:
+\end_layout
+
+\begin_layout Standard
+Its an approximation of functions as sum of sinusoids having frequencies
+ as multiples of fundamental frequency of the given function with different
+ amplitudes.
+\begin_inset Newline newline
+\end_inset
+
+More accurate definition:
+\end_layout
+
+\begin_layout Standard
+An infinite series of trigonometric functions which represents an expansion
+ or approximation of a periodic function, used in Fourier analysis.
+\begin_inset Newline newline
+\end_inset
+
+Here is the Fourier series expansion:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{0}+\sum_{n=1}^{\infty}\left(a_{n}cos(nx)+b_{n}sin(nx)\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The above expansion is the Fourier expansion,The coefficients 
+\begin_inset Formula $a_{n},b_{n}$
+\end_inset
+
+ are computed from the below formula:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+a_{0} & =\frac{1}{2\pi}\int_{0}^{2\pi}f(x)dx\\
+a_{n} & =\frac{1}{\pi}\int_{0}^{2\pi}f(x)cos(nx)dx\\
+b_{n} & =\frac{1}{\pi}\int_{0}^{2\pi}f(x)sin(nx)dx
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Thus we can get the Fourier approximations by getting those coefficients.
+\end_layout
+
+\begin_layout Section*
+2 Determining Fourier coefficients by Integration:
+\end_layout
+
+\begin_layout Standard
+First let us check the periodic nature of functions by plotting the graph
+ from 
+\begin_inset Formula $\left[-2\pi,4\pi\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from scipy import *
+\end_layout
+
+\begin_layout LyX-Code
+
+from pylab import *
+\end_layout
+
+\begin_layout LyX-Code
+
+t=arange(-2*pi,4*pi,0.1)
+\end_layout
+
+\begin_layout LyX-Code
+
+a=cos(cos(t))
+\end_layout
+
+\begin_layout LyX-Code
+
+b=exp(t)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(t,a)
+\end_layout
+
+\begin_layout LyX-Code
+
+title('plot of cos(cos(x))')
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('cos(cos(x)')
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(t,b)
+\end_layout
+
+\begin_layout LyX-Code
+
+title('plot of $e^x$')
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel('x')
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel('$e^x$')
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Graph of
+\begin_inset Formula $cos(cos(x))$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cos.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Graph of 
+\begin_inset Formula $e^{x}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename exponential.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We can clearly observe that the 
+\begin_inset Formula $cos(cos(x))$
+\end_inset
+
+ is periodic but 
+\begin_inset Formula $e^{x}$
+\end_inset
+
+ is not periodic.Later we will discuss about the effect of periodic nature
+ on Fourier series.
+\end_layout
+
+\begin_layout Standard
+Now lets define function such that it take two arguments 
+\begin_inset Formula $k,x$
+\end_inset
+
+ as inputs and gives out 
+\begin_inset Formula $f(x)sin(kx)$
+\end_inset
+
+ and 
+\begin_inset Formula $f(x)cos(kx)$
+\end_inset
+
+ as the outputs don't forget to give 
+\begin_inset Formula $x$
+\end_inset
+
+ as the first argument which will be used by 
+\begin_inset Formula $quad$
+\end_inset
+
+ function for integration.The usage of 
+\begin_inset Formula $k$
+\end_inset
+
+ is to get all the values of 
+\begin_inset Formula $a_{k}'s,b_{k}'s$
+\end_inset
+
+ just by avoiding to write a new function for every 
+\begin_inset Formula $sin(kx),cos(kx)$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+lets define a function 
+\begin_inset Formula $u(x,k1)$
+\end_inset
+
+ where 
+\begin_inset Formula $k1$
+\end_inset
+
+ is an array where the value 
+\begin_inset Formula $k1[0]$
+\end_inset
+
+ defines the value of 
+\begin_inset Formula $k$
+\end_inset
+
+ ,the value of 
+\begin_inset Formula $k1[1]$
+\end_inset
+
+ defines whether 
+\begin_inset Formula $f(x)$
+\end_inset
+
+ is either 
+\begin_inset Formula $cos(cos(x)\mbox{or}e^{x}$
+\end_inset
+
+,the value of 
+\begin_inset Formula $k1[2]$
+\end_inset
+
+ defines weather we want 
+\begin_inset Formula $sin(kx)$
+\end_inset
+
+or 
+\begin_inset Formula $cos(kx)$
+\end_inset
+
+ and returns corresponding output.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+def u(x,k1):
+\end_layout
+
+\begin_layout LyX-Code
+
+	a=(1/(pi))
+\end_layout
+
+\begin_layout LyX-Code
+
+	k,l,m=k1
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(l==0):
+\end_layout
+
+\begin_layout LyX-Code
+
+		a*=cos(cos(x))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(l==1):
+\end_layout
+
+\begin_layout LyX-Code
+
+		a*=(exp(x))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(m==0):
+\end_layout
+
+\begin_layout LyX-Code
+
+		a*=cos(k*x)
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(m==1):
+\end_layout
+
+\begin_layout LyX-Code
+
+		a*=sin(k*x)
+\end_layout
+
+\begin_layout LyX-Code
+
+	return a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we have the function which is to be integrated to get the coefficients,
+ so with this lets compute the coefficients and a vector which will be in
+ the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{array}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+for i in x:
+\end_layout
+
+\begin_layout LyX-Code
+
+	a,b=quad(u,0,l,args=([i,0,0]))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(i==0):
+\end_layout
+
+\begin_layout LyX-Code
+
+		a=a/2
+\end_layout
+
+\begin_layout LyX-Code
+
+	d.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+	a1.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+	a,b=quad(u,0,l,args=([i,0,1]))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(i>0):
+\end_layout
+
+\begin_layout LyX-Code
+
+		d.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+		b1.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+	a,b=quad(u,0,l,args=([i,1,0]))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(i==0):
+\end_layout
+
+\begin_layout LyX-Code
+
+		a=a/2
+\end_layout
+
+\begin_layout LyX-Code
+
+	e.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+	a2.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+	a,b=quad(u,0,l,args=([i,1,1]))
+\end_layout
+
+\begin_layout LyX-Code
+
+	if(i>0):
+\end_layout
+
+\begin_layout LyX-Code
+
+		e.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+		b2.append(a)
+\end_layout
+
+\begin_layout LyX-Code
+
+t1=arange(-2*pi,4*pi,0.1)
+\end_layout
+
+\begin_layout LyX-Code
+
+q=0
+\end_layout
+
+\begin_layout LyX-Code
+
+for k1 in t1:
+\end_layout
+
+\begin_layout LyX-Code
+
+	
+\end_layout
+
+\begin_layout LyX-Code
+
+	
+\end_layout
+
+\begin_layout LyX-Code
+
+	for i in range(0,25):
+\end_layout
+
+\begin_layout LyX-Code
+
+		q=q+b1[i]*sin((i+1)*k1)+a1[i+1]*cos((i+1)*k1)
+\end_layout
+
+\begin_layout LyX-Code
+
+	q=q+a1[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+	cg.append(q)
+\end_layout
+
+\begin_layout LyX-Code
+
+	q=0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+j=array(d)
+\end_layout
+
+\begin_layout LyX-Code
+
+l=array(e)
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By the above code we have also computed the function values from coefficients.
+\end_layout
+
+\begin_layout Section*
+3 Least Square approach:
+\end_layout
+
+\begin_layout Standard
+Its is a way of solving equations where the coefficients are unknown but
+ the function values are known at different points of input variables then
+ we can get the best fitting coefficients by using this approach.
+\end_layout
+
+\begin_layout Section*
+4 Computation of coefficients using least square approach:
+\end_layout
+
+\begin_layout Standard
+We have the equation related to the sinusoid,which may not be exact(because
+ its an infinite series) but we can get best fit for the approximation.
+\begin_inset Newline newline
+\end_inset
+
+Approximation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{0}+\sum_{n=1}^{25}\left(a_{n}cos(nx_{i})+b_{n}sin(nx_{i})\right)\approx f(x_{i})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we already understood that the least square approach is going to give
+ the best values of coefficients,since we know the sinusoid values and function
+ output at different values of 
+\begin_inset Formula $x$
+\end_inset
+
+ so we will form a matrix as shown below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccccc}
+1 & cosx_{1} & sinx_{1} & \ldots & cos25x_{1} & sin25x_{1}\\
+1 & cosx_{2} & sinx_{2} & \ldots & cos25x_{2} & sin25x_{2}\\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots\\
+1 & cosx_{400} & sinx_{400} & \ldots & cos25x_{400} & sin25x_{400}
+\end{array}\right)\left(\begin{array}{c}
+a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{array}\right)=\left(\begin{array}{c}
+f(x_{1})\\
+f(x_{2})\\
+\ldots\\
+f(x_{400})
+\end{array}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where we will define the matrices as Ac=b,where c is the coefficient vector
+ we want ,so lets use lstsq() for computation:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+x=linspace(0,2*pi,401)
+\end_layout
+
+\begin_layout LyX-Code
+
+x=x[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+b=cos(cos(x))
+\end_layout
+
+\begin_layout LyX-Code
+
+A=zeros((400,51))
+\end_layout
+
+\begin_layout LyX-Code
+
+A[:,0]=1
+\end_layout
+
+\begin_layout LyX-Code
+
+for k in range (1,26):
+\end_layout
+
+\begin_layout LyX-Code
+
+	A[:,2*k-1]=cos(k*x)
+\end_layout
+
+\begin_layout LyX-Code
+
+	A[:,2*k]=sin(k*x)
+\end_layout
+
+\begin_layout LyX-Code
+
+c1=lstsq(A,b)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+cl=abs(lstsq(A,b)[0])
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+fig1=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(cl,'go',label="least squares")
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(j,'ro',label="from fourier")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel("log$
+\backslash
+mid$fourier cofficients$
+\backslash
+mid$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel("n$
+\backslash
+longrightarrow$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.suptitle("Comparision of fourier cofficients of cos(cosx) 
+\backslash
+nfrom least squares aprox,integration in semilogy plot ")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+fig2=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+loglog(cl,'go',label="least squares")
+\end_layout
+
+\begin_layout LyX-Code
+
+loglog(j,'ro',label="from fourier")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel("log$
+\backslash
+mid$fourier cofficients$
+\backslash
+mid$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel("logn$
+\backslash
+longrightarrow$")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.suptitle("Comparision of fourier cofficients of cos(cosx) 
+\backslash
+nfrom least squares aprox,integration in loglog plot ")
+\end_layout
+
+\begin_layout LyX-Code
+
+#e**(x):
+\end_layout
+
+\begin_layout LyX-Code
+
+b1=exp(x)
+\end_layout
+
+\begin_layout LyX-Code
+
+cl1=abs(lstsq(A,b1)[0])
+\end_layout
+
+\begin_layout LyX-Code
+
+c2=lstsq(A,b1)[0]
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+fig3=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(l,'r.',label="from fourier")
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(cl1,'go',label="least squares")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.suptitle("Comparision of fourier cofficients of $e^x$ 
+\backslash
+nfrom least squares aprox,integration in semilogy plot ")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel("log$
+\backslash
+mid$fourier cofficients$
+\backslash
+mid$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel("n$
+\backslash
+longrightarrow$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+fig4=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+loglog(l,'r.',label="from fourier")
+\end_layout
+
+\begin_layout LyX-Code
+
+loglog(cl1,'go',label="least squares")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.suptitle("Comparision of fourier cofficients of $e^x$ 
+\backslash
+nfrom least squares aprox,integration in loglog plot ")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel("log$
+\backslash
+mid$fourier cofficients$
+\backslash
+mid$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel("logn$
+\backslash
+longrightarrow$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+#largest deviation in cos(cos(x))
+\end_layout
+
+\begin_layout LyX-Code
+
+d1=abs(j1-c1)
+\end_layout
+
+\begin_layout LyX-Code
+
+e1=max(d1)
+\end_layout
+
+\begin_layout LyX-Code
+
+#largest deviation in e**(x)
+\end_layout
+
+\begin_layout LyX-Code
+
+d2=abs(l1-c2)
+\end_layout
+
+\begin_layout LyX-Code
+
+e2=max(d2)
+\end_layout
+
+\begin_layout LyX-Code
+
+print("the largest deviation between values of cofficients of cos(cos(x)),
+ when calculated from least squares and fourier:")
+\end_layout
+
+\begin_layout LyX-Code
+
+print (e1)
+\end_layout
+
+\begin_layout LyX-Code
+
+print("the largest deviation between values of cofficients of exp(x), when
+ calculated from least squares and fourier:")
+\end_layout
+
+\begin_layout LyX-Code
+
+print (e2)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+C=dot(A,c1)
+\end_layout
+
+\begin_layout LyX-Code
+
+E=dot(A,c2)
+\end_layout
+
+\begin_layout LyX-Code
+
+fig5=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(x,C,'go',label="from least squares")
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(t1,cg,'ro',label="from fourier")
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(t,co,label="function orginal value")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel("x$
+\backslash
+longrightarrow$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel("cos(cosx)")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+fig5=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(x,E,'go',label="from least squares")
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(t1,eg,'ro',label="from fourier")
+\end_layout
+
+\begin_layout LyX-Code
+
+semilogy(t,ex,label="function orginal value")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.ylabel("log $e^x$")
+\end_layout
+
+\begin_layout LyX-Code
+
+plt.xlabel("x$
+\backslash
+longrightarrow$")
+\end_layout
+
+\begin_layout LyX-Code
+
+legend(loc="upper right")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid()
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus we got the coefficients,so lets move on and plot the graphs:
+\begin_inset Newline newline
+\end_inset
+
+Graph of original function and its estimations:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $cos(cos(x))$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename fig2.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $e^{x}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename fig1.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+From above two graphs we can clearly see that the 
+\begin_inset Formula $cos(cos(x))$
+\end_inset
+
+ is almost has a good approximation,where as the 
+\begin_inset Formula $e^{x}$
+\end_inset
+
+doesn't because the Fourier approximation is good approximation for periodic
+ function and its is taken that the function should be of period 
+\begin_inset Formula $2\pi$
+\end_inset
+
+ so its a giving an output repeating at the same periodic interval.Similarly
+ least squares is giving a different graph though it is the best fit because
+ we are computing the coefficient approximation in period 0 to 
+\begin_inset Formula $2\pi$
+\end_inset
+
+.where it is near to the function value as seen in graph.
+\begin_inset Newline newline
+\end_inset
+
+Now lets see the error in approximation for the computation:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $cos(cos(x))$
+\end_inset
+
+ semilogy:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename fig5.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+loglog plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename fig6.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $e^{x}$
+\end_inset
+
+ semilogy:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename fig3.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+loglog:
+\end_layout
+
+\begin_layout Section*
+\begin_inset Graphics
+	filename fig4.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+5 Conclusions:
+\end_layout
+
+\begin_layout Itemize
+1) The 
+\begin_inset Formula $b_{n}$
+\end_inset
+
+ coefficients for cos(cos(x)) are nearly zero.Reason:Because cos(cos(x))
+ is even function whereas sin kx is an odd function so multiplication of
+ both functions is an odd function with period of 2
+\begin_inset Formula $\pi$
+\end_inset
+
+.Since we integrate the function over a time period of 2
+\begin_inset Formula $\pi$
+\end_inset
+
+ to get 
+\begin_inset Formula $b_{n}$
+\end_inset
+
+'s, which is nothing but the period of odd function ,we get zero(integration
+ of an odd function over an interval which is multiple of it's period is
+ zero)
+\end_layout
+
+\begin_layout Itemize
+cos(cos(x)) got it's both of the Fourier and least square approach almost
+ same as the function value whereas the 
+\begin_inset Formula $e^{x}$
+\end_inset
+
+ it is not so good.Reason:This is because the Fourier series approximation
+ is best suited for periodic signals and it is also designed to approximate
+ periodic signals like cos(cos(x)).where as the function 
+\begin_inset Formula $e^{x}$
+\end_inset
+
+ is not periodic so the approximation fails,and for such type of non periodic
+ functions we use Fourier transform with some conditions.
+\end_layout
+
+\begin_layout Itemize
+In plot4 the Fourier coefficients of 
+\begin_inset Formula $e^{x}$
+\end_inset
+
+ in loglog scale are nearly linear.Reason:Because the Fourier coefficients
+ after calculating the integral turn out to be in order of 
+\begin_inset Formula $k^{-2}$
+\end_inset
+
+ when drawn in loglog scale with respect to k it looks linear.
+\end_layout
+
+\begin_layout Section*
+6 The largest deviation in error:
+\end_layout
+
+\begin_layout Standard
+.
+\end_layout
+
+\begin_layout Standard
+The largest deviation between values of coefficients of cos(cos(x)), when
+ calculated from least squares and Fourier: 2.65318862443e-15 
+\end_layout
+
+\begin_layout Standard
+The largest deviation between values of coefficients of exp(x), when calculated
+ from least squares and Fourier: 1.33273087034
+\end_layout
+
+\end_body
+\end_document

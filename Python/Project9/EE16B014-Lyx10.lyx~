@@ -1,0 +1,1934 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Python 10 assignment
+\begin_inset Newline newline
+\end_inset
+
+Spectra of non-periodic signals
+\end_layout
+
+\begin_layout Author
+EE16B014
+\begin_inset Newline newline
+\end_inset
+
+G.HARSHA KANAKA ESWAR
+\end_layout
+
+\begin_layout Date
+April 28, 2018
+\end_layout
+
+\begin_layout Abstract
+In the previous assignment we have found the spectra of periodic signals,
+ in this report we are going to derive the spectra of non-periodic signals.We
+ will also see the use of Hamming Window,for making the non-periodic signal
+ continuous at periodic interval points.We will also derive the spectra of
+ known signal and verify.
+\end_layout
+
+\begin_layout Section*
+Examples:
+\end_layout
+
+\begin_layout Standard
+First we will see the general spectra of 
+\begin_inset Formula $sin\left(\sqrt{2t}\right)$
+\end_inset
+
+,i.e without any window:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+t=linspace(-pi,pi,65);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+y=sin(sqrt(2)*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y[0]=0 # the sample corresponding to -tmax should be set zeroo
+\end_layout
+
+\begin_layout LyX-Code
+
+y=fftshift(y) # make y start with y(t=0)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/64.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,65);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+sin
+\backslash
+left(
+\backslash
+sqrt{2}t
+\backslash
+right)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-10,10])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-1.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t1.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here we got two peaks whose phase is correct but the decaying of magnitude
+ is very less this is because of discontinuity occurring at repetition of
+ every period ,which is causing a sudden jump:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t3.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where the actual graph should be a continuous as shown below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t2.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So we understood that there is a discontinuity which is not actually present,So
+ in order to make it continuous at those points we will introduce window,whose
+ Fourier series coefficients are of order 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+,Lets look at its Fourier coefficients in dB scale:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t4.png
+	lyxscale 90
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So now we will multiply the original function with the window to reduce
+ the jump a the discontinues:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+t1=linspace(-pi,pi,65);t1=t1[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+t2=linspace(-3*pi,-pi,65);t2=t2[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+t3=linspace(pi,3*pi,65);t3=t3[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(64)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/63))
+\end_layout
+
+\begin_layout LyX-Code
+
+y=sin(sqrt(2)*t1)*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+figure(3)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(t1,y,'bo',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(t2,y,'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(t3,y,'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$t$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"$
+\backslash
+sin
+\backslash
+left(
+\backslash
+sqrt{2}t
+\backslash
+right)
+\backslash
+times w(t)$ with $t$ wrapping every $2
+\backslash
+pi$ ")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-5.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now lets see how much the jump is reduced:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t5.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Thus the jump is reduced to maximum extent,so now lets get the fft spectra
+ of the above graph:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(-pi,pi,65);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(64)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/63))
+\end_layout
+
+\begin_layout LyX-Code
+
+y=sin(sqrt(2)*t)*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+y[0]=0 # the sample corresponding to -tmax should be set zero
+\end_layout
+
+\begin_layout LyX-Code
+
+y=fftshift(y) # make y start with y(t=0)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/64.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,65);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-8,8])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+sin
+\backslash
+left(
+\backslash
+sqrt{2}t
+\backslash
+right)
+\backslash
+times w(t)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-8,8])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-6.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The spectra after windowing:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t6.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now the decaying of the magnitude is improved greatly,but still the peak
+ is like width of two samples,so lets increase the no.of samples:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(-4*pi,4*pi,257);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(256)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/256))
+\end_layout
+
+\begin_layout LyX-Code
+
+y=sin(sqrt(2)*t)*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+y[0]=0 # the sample corresponding to -tmax should be set zero
+\end_layout
+
+\begin_layout LyX-Code
+
+y=fftshift(y) # make y start with y(t=0)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/256.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,257);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-4,4])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+sin
+\backslash
+left(
+\backslash
+sqrt{2}t
+\backslash
+right)
+\backslash
+times w(t)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-4,4])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-6.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So lets plot the spectra after increasing no.of samples:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename t7.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Thus we can see the spectra improved far better than the spectra without
+ windowing
+\end_layout
+
+\begin_layout Section*
+Spectra of 
+\begin_inset Formula $cos^{3}(\omega_{0}t)$
+\end_inset
+
+ with value of 
+\begin_inset Formula $\omega=0.86$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Now lets plot the spectra of 
+\begin_inset Formula $cos^{3}(\omega_{0}t)$
+\end_inset
+
+ with and without the hamming window and see the differences:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(-4*pi,4*pi,257);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(256)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/255))
+\end_layout
+
+\begin_layout LyX-Code
+
+y=((cos(0.86*t))**3)# y=sin(1.25*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y[0]=0 
+\end_layout
+
+\begin_layout LyX-Code
+
+y1=fftshift(y) 
+\end_layout
+
+\begin_layout LyX-Code
+
+Y1=fftshift(fft(y))/256.0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y=y*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+y=fftshift(y)
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/256.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,257);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),'b',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-8,8])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+cos^3
+\backslash
+left(0.86t
+\backslash
+right)
+\backslash
+times w(t)$""
+\backslash
+n with hamming window")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-4,4])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y1),'b',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-8,8])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+cos^3
+\backslash
+left(0.86t
+\backslash
+right)
+\backslash
+times w(t)$""
+\backslash
+n without hamming window")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y1),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-4,4])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-7.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now lets see the spectra of 
+\begin_inset Formula $cos^{3}(\omega_{0}t)$
+\end_inset
+
+without hamming window:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q1wo.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We can see that there is still no zero values existing after the peaks has
+ occurred,Now lets see the spectra with Hamming Window:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q1w.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here the values after peaks is going to zero,Lets see the same spectra with
+ Hamming Window and more no.of samples:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q1ws.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Without Window more no.of samples:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q1wos.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+By increasing samples the spectra's has improved,But we can say that the
+ spectra with Hamming window is more accurate.
+\end_layout
+
+\begin_layout Section*
+Finding 
+\begin_inset Formula $\omega_{0},\delta$
+\end_inset
+
+ of 
+\begin_inset Formula $cos(\omega_{0}+\delta)$
+\end_inset
+
+ using the given samples:
+\end_layout
+
+\begin_layout Standard
+Now we will have 
+\begin_inset Formula $128$
+\end_inset
+
+ samples of 
+\begin_inset Formula $cos(\omega_{0}+\delta)$
+\end_inset
+
+ the from which we calculate the values of 
+\begin_inset Formula $\omega_{0},\delta$
+\end_inset
+
+ ,From the spectra created from the given samples.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(-pi,pi,129);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(128)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/127))
+\end_layout
+
+\begin_layout LyX-Code
+
+w0=2
+\end_layout
+
+\begin_layout LyX-Code
+
+d=pi/4
+\end_layout
+
+\begin_layout LyX-Code
+
+y=cos(w0*t+d)
+\end_layout
+
+\begin_layout LyX-Code
+
+y=y*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+y[0]=0
+\end_layout
+
+\begin_layout LyX-Code
+
+y=fftshift(y) 
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/128.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,129);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),'b',w,abs(Y),'bo',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-8,8])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+cos^3(w_0+
+\backslash
+delta)
+\backslash
+times w(t)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-8,8])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-7.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we have take the samples of function whose 
+\begin_inset Formula $\omega_{0}=2,\delta=\frac{\pi}{4}$
+\end_inset
+
+ ,Now lets plot the spectra from the samples and see whether we can get
+ those values from spectra:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q2.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We can get the value of \SpecialChar endofsentence
+
+\begin_inset Formula $\omega_{0}$
+\end_inset
+
+ by seeing the point of peak occurring and the value of 
+\begin_inset Formula $\delta$
+\end_inset
+
+ can be found out by looking at the phase at the peak lying in positive
+ x-axis.(which give the value of 
+\begin_inset Formula $\delta$
+\end_inset
+
+ along with sign)
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+~
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now lets add some 
+\begin_inset Quotes eld
+\end_inset
+
+white Gaussian noise
+\begin_inset Quotes erd
+\end_inset
+
+ and see the spectra and get the values of 
+\begin_inset Formula $\omega_{0},\delta$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+y=cos(w0*t+d)+0.1*randn(128)
+\end_layout
+
+\begin_layout LyX-Code
+
+y=y*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lets see the spectra:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q4l.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+For integer values of 
+\begin_inset Formula $\omega_{0}$
+\end_inset
+
+ the spectra is looking good.
+\begin_inset Newline newline
+\end_inset
+
+Lets take a look at the graphs when 
+\begin_inset Formula $\omega_{0}=1.34$
+\end_inset
+
+ non-interger:
+\begin_inset Newline newline
+\end_inset
+
+Without 
+\begin_inset Quotes eld
+\end_inset
+
+white Gaussian noise
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q2n.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+With 
+\begin_inset Quotes eld
+\end_inset
+
+white Gaussian noise
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q4n.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here also we can see the peaks ,From which we can get the values of 
+\begin_inset Formula $\omega_{0},\delta$
+\end_inset
+
+ but some slight distortion,unlike in case of integer values of 
+\begin_inset Formula $\omega_{0}$
+\end_inset
+
+ more accurate.(Because of the no of samples are fixed to 
+\begin_inset Formula $128$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Section*
+DFT of 
+\begin_inset Formula $cos\left(16\left(1.5+\frac{t}{2\pi}\right)t\right)$
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Standard
+This function is also known as the chirped signal,whose frequency continuously
+ changes from 16 to 32 rads per second.
+\begin_inset Newline newline
+\end_inset
+
+Lets get the spectra of this chirped signal with and without window:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(-pi,pi,1025);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(1024)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/1024))
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y=cos(16*(1.5+t/(2*pi))*t)# y=sin(1.25*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+#y=y*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+y[0]=0
+\end_layout
+
+\begin_layout LyX-Code
+
+y=fftshift(y) 
+\end_layout
+
+\begin_layout LyX-Code
+
+Y=fftshift(fft(y))/1024.0
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,1025);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,abs(Y),'b',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-100,100])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"$|Y|$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+title(r"Spectrum of $
+\backslash
+cos
+\backslash
+left(16
+\backslash
+left(1.5+
+\backslash
+frac{t}{2
+\backslash
+pi}
+\backslash
+right)t
+\backslash
+right)
+\backslash
+times w(t)$")
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+subplot(2,1,2)
+\end_layout
+
+\begin_layout LyX-Code
+
+plot(w,angle(Y),'ro',lw=2)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlim([-100,100])
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel(r"Phase of $Y$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel(r"$
+\backslash
+omega$",size=16)
+\end_layout
+
+\begin_layout LyX-Code
+
+grid(True)
+\end_layout
+
+\begin_layout LyX-Code
+
+savefig("fig10-7.png")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Without Window:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q5wo.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We are now seeing many peaks are occurring side by side at a frequency,Now
+ lets see what happens if we apply window:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q5w.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+They all merged into single peak of amplitude=sum of amplitudes of the different
+ peaks,at that frequency.
+\end_layout
+
+\begin_layout Section*
+3D surface plot of different samples of 
+\begin_inset Formula $cos\left(16\left(1.5+\frac{t}{2\pi}\right)t\right)$
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Standard
+Lets see how the surface plot looks like,when the 
+\begin_inset Formula $1024$
+\end_inset
+
+ samples of the function are taken into an array whose columns contain 
+\begin_inset Formula $64$
+\end_inset
+
+ samples ,filled one after the other by the total samples of 
+\begin_inset Formula $1024$
+\end_inset
+
+ forming 
+\begin_inset Formula $16$
+\end_inset
+
+ columns,And then we will draw the surface 3D plot.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset listings
+inline false
+status open
+
+\begin_layout LyX-Code
+
+from pylab import*
+\end_layout
+
+\begin_layout LyX-Code
+
+from scipy import *
+\end_layout
+
+\begin_layout LyX-Code
+
+import mpl_toolkits.mplot3d.axes3d as p3
+\end_layout
+
+\begin_layout LyX-Code
+
+t=linspace(-pi,pi,1025);t=t[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+dt=t[1]-t[0];fmax=1/dt
+\end_layout
+
+\begin_layout LyX-Code
+
+n=arange(64)
+\end_layout
+
+\begin_layout LyX-Code
+
+wnd=fftshift(0.54+0.46*cos(2*pi*n/63))
+\end_layout
+
+\begin_layout LyX-Code
+
+A=zeros((64,16))
+\end_layout
+
+\begin_layout LyX-Code
+
+t2=arange(16)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+y=cos(16*(1.5+t/(2*pi))*t)
+\end_layout
+
+\begin_layout LyX-Code
+
+print(y)
+\end_layout
+
+\begin_layout LyX-Code
+
+#y=y*wnd
+\end_layout
+
+\begin_layout LyX-Code
+
+#A[:,t1]=y[(t1-1)*64:t1*64]
+\end_layout
+
+\begin_layout LyX-Code
+
+for t1 in t2:
+\end_layout
+
+\begin_layout LyX-Code
+
+	A[:,t1]=fftshift(fft(fftshift(y[t1*64:(t1+1)*64]*wnd)))/64.0
+\end_layout
+
+\begin_layout LyX-Code
+
+print(A)
+\end_layout
+
+\begin_layout LyX-Code
+
+w=linspace(-pi*fmax,pi*fmax,65);w=w[:-1]
+\end_layout
+
+\begin_layout LyX-Code
+
+x=arange(0,16,1)
+\end_layout
+
+\begin_layout LyX-Code
+
+y=arange(64)
+\end_layout
+
+\begin_layout LyX-Code
+
+X,Y=meshgrid(x,y)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+fig1=figure()
+\end_layout
+
+\begin_layout LyX-Code
+
+ax=p3.Axes3D(fig1)
+\end_layout
+
+\begin_layout LyX-Code
+
+title("time-frequency plot")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+for i in range(16):
+\end_layout
+
+\begin_layout LyX-Code
+
+	ax.plot3D(X[:,i],w,abs(A[:,i]))
+\end_layout
+
+\begin_layout LyX-Code
+
+ylim(-50,50)
+\end_layout
+
+\begin_layout LyX-Code
+
+xlabel("time step")
+\end_layout
+
+\begin_layout LyX-Code
+
+ylabel("w")
+\end_layout
+
+\begin_layout LyX-Code
+
+show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lets see the surface 3D plot:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename q6.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+From this graph we can clearly observe the different peaks at different
+ time which are nothing but the peaks occurred in the spectra of 
+\begin_inset Formula $cos\left(16\left(1.5+\frac{t}{2\pi}\right)t\right)$
+\end_inset
+
+ without application of window.[i.e by application of window all peaks are
+ merging to give rise to a new single peak]
+\end_layout
+
+\end_body
+\end_document
